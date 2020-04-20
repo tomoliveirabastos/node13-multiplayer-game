@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "start": "yarn nodemon server.js"
+  },
+  "dependencies": {
+    "ejs": "^3.0.2",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.3",
+    "socket.io": "^2.3.0"
+  }
+}
