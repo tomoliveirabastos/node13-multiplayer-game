@@ -32,7 +32,7 @@
         <script src="mundo.js"></script>
         <script type="text/javascript">
 
-            let sound = new Howl({ src: ['song/song002.wav'] });
+            let sound = new Howl({ src: ['song/song003.mp3'] });
             sound._autoplay = true;
             sound._loop = true;
             sound.play();
@@ -51,6 +51,13 @@
                 if(player.x + player.size > cam.right()){ cam.cx = player.x + player.size - (canvas.width * 0.75); }
                 if(player.y < cam.top()){ cam.cy = player.y - (canvas.height * 0.25); }
                 if(player.y + player.size > cam.bottom()){ cam.cy = player.y + player.size - (canvas.height * 0.75); }
+
+                if(player.game_world){
+                    if(cam.cx < 0){cam.cx = 0;}
+                    if(cam.cx + canvas.width > player.game_world.max_width){ cam.cx = player.game_world.max_width - canvas.width; }
+                    if(cam.cy < 0){cam.cy = 0;}
+                    if(cam.cy + canvas.height > player.game_world.max_height){cam.cy = player.game_world.max_height - canvas.height; }
+                }
                 ctx.translate(-cam.cx, -cam.cy);
             }
 

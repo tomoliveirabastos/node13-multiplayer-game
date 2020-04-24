@@ -3,6 +3,7 @@ class Map{
         this.size = 40;
         this.current = 0;
     }
+
     getMap(){
         let map = {
             0 : ()=>{
@@ -30,6 +31,17 @@ class Map{
         }
         return map;
     }
+
+    get_game_world(){
+        let map = this.getMap()[this.current]();
+
+        return {
+            'max_height' : map.length * this.size,
+            'max_width' : map[0].length * this.size
+        }
+        
+    }
+
     get_tile(){
         let n = [];
         let m = this.getMap()[this.current]();

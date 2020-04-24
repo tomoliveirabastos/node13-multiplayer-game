@@ -12,6 +12,7 @@ class Player{
         this.srcY = 32;
         this.score = 0;
         this.name = '';
+        this.game_world = null;
     }
     render(){
         this.check_collide();

@@ -23,3 +23,4 @@ socket.on('beep', (e)=>{
     snd.play();
 });
 socket.on('my_score', (e)=>{ player.score = e; });
+socket.on('game_world', (e) => {player.game_world = e});

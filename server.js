@@ -43,13 +43,14 @@ io.on('connection', socket =>{
         speed: 2.5,
         score: 0,
         name: '',
-        size: 20
+        size: 20,
     };
 
     class_players.set_player(p);
     socket.emit('player', p);
     socket.emit('food', food);
     socket.emit('map', { no_tile : no_tile, tile: tile, size: class_map.size});
+    socket.emit('game_world', class_map.get_game_world());
     socket.on('disconnect', () =>{ class_players.remove_player(socket.id) });
     socket.on('message', (e)=>{
         class_players.set_player(e);
