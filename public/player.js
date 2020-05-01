@@ -17,7 +17,7 @@ class Player{
     render(){
         this.check_collide();
         this.set_score();
-        this.img.src = "sprite/hero_img.png";
+        this.img.src = "sprite/img01.png";
         if(this.count > 7){ this.count = 0;}
         ctx.drawImage(
             this.img, this.srcX * this.count, this.srcY * this.position, this.img.width/8, this.img.height/4,

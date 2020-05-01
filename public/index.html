@@ -27,6 +27,7 @@
         <script src="virtualpad.js"></script>
         <script src="food.js"></script>
         <script src="player.js"></script>
+        <script src="enemy.js"></script>
         <script src="socket.js"></script>
         <script src="otherPlayers.js"></script>
         <script src="mundo.js"></script>
@@ -40,17 +41,17 @@
             let cam = {
                 cx: 0,
                 cy: 0,
-                left : ()=>{ return cam.cx  + (canvas.width * 0.25); },
-                right : ()=>{ return cam.cx + (canvas.width * 0.75); },
-                top: ()=>{ return cam.cy + (canvas.height * 0.25); },
-                bottom: ()=>{ return cam.cy + (canvas.height * 0.75); }
+                left : ()=>{ return cam.cx  + (canvas.width * 0.50); },
+                right : ()=>{ return cam.cx + (canvas.width * 0.50); },
+                top: ()=>{ return cam.cy + (canvas.height * 0.50); },
+                bottom: ()=>{ return cam.cy + (canvas.height * 0.50); }
             };
 
             let camera = ()=>{
-                if(player.x < cam.left()){  cam.cx = player.x - (canvas.width * 0.25); }
-                if(player.x + player.size > cam.right()){ cam.cx = player.x + player.size - (canvas.width * 0.75); }
-                if(player.y < cam.top()){ cam.cy = player.y - (canvas.height * 0.25); }
-                if(player.y + player.size > cam.bottom()){ cam.cy = player.y + player.size - (canvas.height * 0.75); }
+                if(player.x < cam.left()){  cam.cx = player.x - (canvas.width * 0.50); }
+                if(player.x + player.size > cam.right()){ cam.cx = player.x + player.size - (canvas.width * 0.50); }
+                if(player.y < cam.top()){ cam.cy = player.y - (canvas.height * 0.50); }
+                if(player.y + player.size > cam.bottom()){ cam.cy = player.y + player.size - (canvas.height * 0.50); }
 
                 if(player.game_world){
                     if(cam.cx < 0){cam.cx = 0;}

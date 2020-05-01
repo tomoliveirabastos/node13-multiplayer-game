@@ -6,7 +6,7 @@ class OtherPlayers{
         let e = this.all_players;
         let keys = Object.keys(e);
         let img = new Image();
-        img.src = "sprite/img.png";
+        img.src = "sprite/hero_img.png";
         for(let i = 0; i< keys.length; i++){
             if(socket.id !== keys[i]){
                 if(e[keys[i]].count > 7){ e[keys[i]].count = 0;}

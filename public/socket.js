@@ -6,6 +6,7 @@ socket.on('player', (e)=>{
     player.id = e.id;
     player.size = 20;
     player.speed = e.speed;
+    player.score = e.score;
 });
 socket.on('other_players', (e) =>{ otherPlayers.all_players = e; });
 socket.on('food', (e)=>{
@@ -24,3 +25,8 @@ socket.on('beep', (e)=>{
 });
 socket.on('my_score', (e)=>{ player.score = e; });
 socket.on('game_world', (e) => {player.game_world = e});
+socket.on('enemy', (e)=>{
+    enemy.x = e.x;
+    enemy.y = e.y;
+    enemy.size = e.size;
+});

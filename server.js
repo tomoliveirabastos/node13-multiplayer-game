@@ -1,6 +1,7 @@
 let class_players = require('./Players/player');
 let class_food = require('./Players/food');
 let class_map = require('./Map/map');
+let class_enemy = require('./Players/enemy');
 
 const express = require('express');
 const path = require('path');
@@ -34,19 +35,40 @@ let check_collide = (p)=>{
 let no_tile = class_map.get_no_tile();
 let tile = class_map.get_tile();
 let food = food_change_position();
+let enemy = class_enemy;
+
+let p = {
+    x: no_tile[0].x, 
+    y: no_tile[0].y,
+    speed: 2.5,
+    score: 0,
+    name: '',
+    size: 20,
+};
+
 
 io.on('connection', socket =>{
-    let p = {
-        id: socket.id,
-        x: no_tile[0].x, 
-        y: no_tile[0].y,
-        speed: 2.5,
-        score: 0,
-        name: '',
-        size: 20,
-    };
-
+    
+    p.id = socket.id;
     class_players.set_player(p);
+    let check_collide_enemy = (id)=>{
+        let p = class_players.all_players;
+        let a = p[id];
+        let b = class_enemy;
+        let distX = (a.x + a.size/2) - (b.x + b.size/2);
+        let distY = (a.y + a.size/2) - (b.y + b.size/2);
+        let c_size = (a.size + b.size)/2;
+        if(Math.abs(distX) < c_size && Math.abs(distY) < c_size){
+            class_players.all_players[id].score = 0;
+            socket.emit('player', class_players.all_players[id]);
+        }
+    }
+
+    setInterval(()=>{
+        enemy.move(class_map, class_map.size);
+        socket.broadcast.emit('enemy', enemy);
+    }, 1000/60);
+
     socket.emit('player', p);
     socket.emit('food', food);
     socket.emit('map', { no_tile : no_tile, tile: tile, size: class_map.size});
@@ -54,6 +76,7 @@ io.on('connection', socket =>{
     socket.on('disconnect', () =>{ class_players.remove_player(socket.id) });
     socket.on('message', (e)=>{
         class_players.set_player(e);
+        check_collide_enemy(e.id);
         socket.broadcast.emit('other_players', class_players.all_players);
         if(check_collide(e) === true){ 
             food = food_change_position();
