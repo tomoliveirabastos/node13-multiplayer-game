@@ -1,5 +1,5 @@
 
-let socket = io("http://localhost:4000");
+let socket = io("https://tomoliveirahero.herokuapp.com/");
 socket.on('player', (e)=>{
     player.x = e.x;
     player.y = e.y;
