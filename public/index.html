@@ -1,116 +1,120 @@
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>YEAP</title>
-    </head>
-    <style>
-        body{
-            background-color: rgba(0,0,0,0.9)
-        }
-        canvas{
-            position:absolute !important;
-            top: 0;
-            bottom:0;
-            left:0;
-            right:0;
-            margin: auto auto;
-            border-radius: 8px;
-            background-color:white;
-        }
-    </style>
-    <body>
-        <canvas height="400" width="300"></canvas>
-        <script src="howler.core.js"></script>
-        <script src="socket.io.js"></script>
-        <script src="map.js"></script>
-        <script src="virtualpad.js"></script>
-        <script src="food.js"></script>
-        <script src="player.js"></script>
-        <script src="enemy.js"></script>
-        <script src="socket.js"></script>
-        <script src="otherPlayers.js"></script>
-        <script src="mundo.js"></script>
-        <script type="text/javascript">
 
-            let sound = new Howl({ src: ['song/song003.mp3'] });
-            sound._autoplay = true;
-            sound._loop = true;
-            sound.play();
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>YEAP</title>
+</head>
+<style>
+    body {
+        background-color: rgba(0, 0, 0, 0.9)
+    }
 
-            let cam = {
-                cx: 0,
-                cy: 0,
-                left : ()=>{ return cam.cx  + (canvas.width * 0.50); },
-                right : ()=>{ return cam.cx + (canvas.width * 0.50); },
-                top: ()=>{ return cam.cy + (canvas.height * 0.50); },
-                bottom: ()=>{ return cam.cy + (canvas.height * 0.50); }
-            };
+    canvas {
+        position: absolute !important;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto auto;
+        border-radius: 8px;
+        background-color: white;
+    }
+</style>
 
-            let camera = ()=>{
-                if(player.x < cam.left()){  cam.cx = player.x - (canvas.width * 0.50); }
-                if(player.x + player.size > cam.right()){ cam.cx = player.x + player.size - (canvas.width * 0.50); }
-                if(player.y < cam.top()){ cam.cy = player.y - (canvas.height * 0.50); }
-                if(player.y + player.size > cam.bottom()){ cam.cy = player.y + player.size - (canvas.height * 0.50); }
+<body>
+    <canvas height="400" width="300"></canvas>
+    <script src="howler.core.js"></script>
+    <script src="socket.io.js"></script>
+    <script src="map.js"></script>
+    <script src="virtualpad.js"></script>
+    <script src="food.js"></script>
+    <script src="player.js"></script>
+    <script src="enemy.js"></script>
+    <script src="socket.js"></script>
+    <script src="otherPlayers.js"></script>
+    <script src="mundo.js"></script>
+    <script type="text/javascript">
 
-                if(player.game_world){
-                    if(cam.cx < 0){cam.cx = 0;}
-                    if(cam.cx + canvas.width > player.game_world.max_width){ cam.cx = player.game_world.max_width - canvas.width; }
-                    if(cam.cy < 0){cam.cy = 0;}
-                    if(cam.cy + canvas.height > player.game_world.max_height){cam.cy = player.game_world.max_height - canvas.height; }
-                }
-                ctx.translate(-cam.cx, -cam.cy);
+        let sound = new Howl({ src: ['song/song003.mp3'] });
+        sound._autoplay = true;
+        sound._loop = true;
+        sound.play();
+
+        let cam = {
+            cx: 0,
+            cy: 0,
+            left: () => { return cam.cx + (canvas.width * 0.50); },
+            right: () => { return cam.cx + (canvas.width * 0.50); },
+            top: () => { return cam.cy + (canvas.height * 0.50); },
+            bottom: () => { return cam.cy + (canvas.height * 0.50); }
+        };
+
+        let camera = () => {
+            if (player.x < cam.left()) { cam.cx = player.x - (canvas.width * 0.50); }
+            if (player.x + player.size > cam.right()) { cam.cx = player.x + player.size - (canvas.width * 0.50); }
+            if (player.y < cam.top()) { cam.cy = player.y - (canvas.height * 0.50); }
+            if (player.y + player.size > cam.bottom()) { cam.cy = player.y + player.size - (canvas.height * 0.50); }
+
+            if (player.game_world) {
+                if (cam.cx < 0) { cam.cx = 0; }
+                if (cam.cx + canvas.width > player.game_world.max_width) { cam.cx = player.game_world.max_width - canvas.width; }
+                if (cam.cy < 0) { cam.cy = 0; }
+                if (cam.cy + canvas.height > player.game_world.max_height) { cam.cy = player.game_world.max_height - canvas.height; }
             }
+            ctx.translate(-cam.cx, -cam.cy);
+        }
 
 
-            let joystick= new VirtualJoystick({container: document.querySelector('canvas'), mouseSupport:true});
-            let canvas = document.querySelector('canvas');
-            let ctx = canvas.getContext('2d');
-            let mundo = new Mundo();
-            let loop = ()=>{
-                ctx.save();
-                ctx.clearRect(0,0,canvas.width, canvas.height);
-                camera();
-                mundo.run();
-                window.requestAnimationFrame(loop, canvas);
-                ctx.restore();
+        let joystick = new VirtualJoystick({ container: document.querySelector('canvas'), mouseSupport: true });
+        let canvas = document.querySelector('canvas');
+        let ctx = canvas.getContext('2d');
+        let mundo = new Mundo();
+        let loop = () => {
+            ctx.save();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            camera();
+            mundo.run();
+            window.requestAnimationFrame(loop, canvas);
+            ctx.restore();
+        }
+        let p = prompt("Digite seu nick");
+        if (p) { player.name = p; }
+        loop();
+        let keyboard = {
+            'ArrowUp': (player) => {
+                player.y -= player.speed;
+                player.count++;
+                player.position = 1;
+                return player;
+            },
+            'ArrowDown': (player) => {
+                player.y += player.speed;
+                player.count++;
+                player.position = 0;
+                return player;
+            },
+            'ArrowLeft': (player) => {
+                player.x -= player.speed;
+                player.count++;
+                player.position = 2;
+                return player;
+            },
+            'ArrowRight': (player) => {
+                player.x += player.speed;
+                player.position = 3;
+                player.count++;
+                return player;
             }
-            let p = prompt("Digite seu nick");
-            if(p){player.name = p;}
-            loop();
-            let keyboard = {
-                'ArrowUp': (player)=>{
-                    player.y -= player.speed;
-                    player.count++;
-                    player.position = 1;
-                    return player;
-                },
-                'ArrowDown': (player)=>{
-                    player.y += player.speed;
-                    player.count++;
-                    player.position = 0;
-                    return player;
-                },
-                'ArrowLeft' : (player)=>{
-                    player.x -= player.speed;
-                    player.count++;
-                    player.position = 2;
-                    return player;
-                },
-                'ArrowRight' : (player)=>{
-                    player.x += player.speed;
-                    player.position = 3;
-                    player.count++;
-                    return player;
-                } 
-            };
-            setInterval(()=>{
-                + (joystick.right()	? socket.emit('message',keyboard['ArrowRight'](player)) : '')
-                + (joystick.up()	? socket.emit('message',keyboard['ArrowUp'](player))	: '')
-                + (joystick.left()	? socket.emit('message',keyboard['ArrowLeft'](player)) : '')
-                + (joystick.down()	? socket.emit('message',keyboard['ArrowDown'](player)) : '');
-            }, 1/25*1000);
+        };
+        setInterval(() => {
+            + (joystick.right() ? socket.emit('message', keyboard['ArrowRight'](player)) : '')
+                + (joystick.up() ? socket.emit('message', keyboard['ArrowUp'](player)) : '')
+                + (joystick.left() ? socket.emit('message', keyboard['ArrowLeft'](player)) : '')
+                + (joystick.down() ? socket.emit('message', keyboard['ArrowDown'](player)) : '');
+        }, 1 / 25 * 1000);
 
-        </script>
-    </body>
+    </script>
+</body>
+
 </html>
